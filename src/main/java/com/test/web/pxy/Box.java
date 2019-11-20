@@ -14,7 +14,10 @@ public class Box<T> {
 		box = new HashMap<String, T>();
 		
 	}
-	public void put(List<String> x, List<T> y) {
+	public void put(String s , T t) {
+		box.put(s, t);
+	}
+	public void put(List<String> x, Inventory<T> y) {
 		box = new HashMap<>();
 		for (int i = 0; i < x.size(); i++) {
 			box.put(x.get(i), y.get(i));

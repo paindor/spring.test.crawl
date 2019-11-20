@@ -110,7 +110,75 @@ app = (()=>{
 					break
 				case 'bugs':
 					$.getJSON(_+'/crwal/bugs', d=>{
+						let pager = d.pager;
+						let list = d.list;
+						alert('벅스' + list)
+						//title artist thumbnail
 						$('#right').empty()
+						$('<table id="content"><tr id="head"></tr></table>')
+						.css({width:'99%', 	
+							height:'50px',
+							border: '3px solid olive',
+							
+							})
+						.appendTo('#right')
+						$.each(['No', '제목', '가수', '앨범'],(i,j)=>{
+							$('<th/>')
+							.html('<b>'+j+'</b>')
+							.css({width:'25%', 	
+								height:'100%',
+								border: '3px solid olive',
+							
+								
+								})
+							.appendTo('#head')
+						})
+						$.each(list, (i,j)=>{
+							$('<tr><td>'+j.seq+'</td><td>'+j.title+'</td><td>'+j.artist+'</td><td><img src="'+j.thumbnail+'"/></td></tr>')
+							.css({width:'20%', 	
+								height:'100%',
+								border: '3px solid olive',
+								
+								})
+							.appendTo('#content tbody')
+							//alert('title' +j.title)
+						})
+						$('#content tr td').css({border: '3px solid olive'})
+						$('<span/>')
+						.appendTo('#right')
+						let i = 0;
+						if(pager.existPrev){
+							$('<a>Prev</a>')
+							.appendTo('#right span')
+						}
+						let start = pager.startPage
+						let end = pager.endPage
+						
+						for( let i = start; i <=end ; i++){
+							$('<a>'+(i+1)+'</a>')
+							.appendTo('#right span')
+							.click(e=>{
+								e.preventDefault()
+								$.getJSON(_+'/cr/bugs/'+i)
+							})
+						}
+						
+						/*$.each(pager,(i,j)=>{
+							alert(i)
+							$('<a>'+(i+1)+'</a>')
+							.appendTo('#right span')
+							
+						})*/
+						if(pager.existNext){
+							$('<a>Next</a>')
+							.appendTo('#right span')
+						}
+						
+					/*	$.each([],()=>{
+							
+						})
+						*/
+					
 					})
 					break
 				}

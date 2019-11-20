@@ -26,5 +26,12 @@ public class Proxy {
 		f.accept(t);
 		
 	}
+	public String string(Object t) {
+		Function<Object, String> f= String::valueOf;
+		
+		return f.apply(t);
+		
+		
+	}
 
 }

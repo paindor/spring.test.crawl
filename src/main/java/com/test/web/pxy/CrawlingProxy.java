@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class CrawlingProxy extends Proxy {
 	@Autowired Inventory<HashMap<String, String>> inventory;
 	@Autowired Box<String> box;
+
 	
 	public ArrayList<HashMap<String, String>> engCrawling(String url) {
 		url = "https://endic.naver.com/?sLn=kr";
@@ -98,5 +99,34 @@ public class CrawlingProxy extends Proxy {
 		inventory.get().forEach(this::printer);
 		return inventory.get();
 	}	
+	public ArrayList<HashMap<String, String>> bugsCrawling() {
+		try {
+			inventory.clear();
+			final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
+			String bugsurl = "https://music.bugs.co.kr/chart";
+			Connection.Response homePage = Jsoup.connect(bugsurl).method(Connection.Method.GET).userAgent(USER_AGENT)
+					.execute();
+			Document temp = homePage.parse();
+			Elements tempforTitle = temp.select("p.title");
+			Elements tempforContent = temp.select("p.artist");
+			Elements tempforphoto = temp.select("a.thumbnail");
+			HashMap<String, String>map=null;
+			int bugsseq = 0;
+			for (int i = 0 ; i <tempforTitle.size();i++) {
+			
+				map = new HashMap<>();
+				map.put("seq", this.string(i+1));
+				map.put("title", tempforTitle.get(i).text());
+				map.put("artist", tempforContent.get(i).text());
+				map.put("thumbnail", tempforphoto.get(i).select("img").attr("src"));
+				inventory.add(map);
+			}
+		} catch (Exception e) {
+		}
+		System.out.println("********************크롤링결과********************");
+		inventory.get().forEach(System.out :: println);
+		return inventory.get();
+	}
+	
 	
 }
