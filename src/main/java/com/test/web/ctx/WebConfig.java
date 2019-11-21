@@ -2,18 +2,18 @@ package com.test.web.ctx;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebContext extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] {RootContext.class};
+		return new Class[] {RootConfig.class};
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] {ServletContext.class};
+		return new Class[] {ServletConfig.class};
 	}
 
 	@Override
