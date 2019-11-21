@@ -84,6 +84,7 @@ app = (()=>{
 			.appendTo('#left')
 			.click(function(){
 				$(this).css({'background-color': 'yellow'})
+				//$(this).siblings().style.removeProperty('background-color')
 				$(this).siblings().css({'background-color': 'white'})
 				alert('in the '+_)
 				switch($(this).text()){
