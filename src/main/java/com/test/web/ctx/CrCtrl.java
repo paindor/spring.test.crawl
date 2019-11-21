@@ -34,9 +34,9 @@ public class CrCtrl {
 		
 		
 	}
-	@GetMapping("/bugs/{page}")
+	@GetMapping("/bugs/page/{page}")
 	public Map<?, ?> bugsCrawling(@PathVariable String page){
-		System.out.println("bugs");
+		System.out.println("넘어온페이지 " + page);
 		ArrayList<HashMap<String, String>> list = crawler.bugsCrawling();
 		
 	
@@ -45,7 +45,8 @@ public class CrCtrl {
 		pagePX.setRowCount(list.size());
 		pagePX.setPageSize(10);
 		pagePX.setBlockSize(5);
-		pagePX.setCurrPage(0);
+		pagePX.setCurrPage(pagePX.integer(page));
+
 		pagePX.paging();
 		ArrayList<HashMap<String, String>> temp = new ArrayList<>();
 		

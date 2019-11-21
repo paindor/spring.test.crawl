@@ -2,17 +2,30 @@
 var app = app ||{}
 
 app = (()=>{
+	const WHEN_ERR = 'js로드실패'
 	let _ , js, css, img 
 	
 	let run =x=>{
-		$.getScript(x+'/resources/js/router.js', ()=>{
-			$.extend(new Session(x))
-			init()
-			onCreate()
+		
+		$.when(
+				$.getScript(x+'/resources/js/router.js', ()=>{
+					$.extend(new Session(x))
+					
+					
+				}),
+				$.getScript(x+'/resources/js/pop.js')
+				
+			).done(()=>{
+				init()
+				onCreate()
+			
+		})
+		.fail(()=>{
+			alert(WHEN_ERR)
 			
 		})
 	}
-	let init =x=>{
+	let init =()=>{
 		_ = $.ctx()
 		js = $.js()
 		css = $.css()
@@ -23,7 +36,9 @@ app = (()=>{
 		
 	}
 	let onCreate =()=>{
-		
+		$(pop.view()).appendTo('#wrapper')
+		pop.open()
+	
 		setContentView()
 		
 		
@@ -54,7 +69,7 @@ app = (()=>{
 		.css({width:'80%' , height:'100%' , border: '1px solid black', margin:'0 auto'})
 		.appendTo('#wrapper')
 		$('<td/>', {id: 'left'})
-		.css({width:'20%' , height:'100%' , border: '1px solid black', 'vertical-align': 'top'})
+		.css({width:'20%' , height:'900px' , border: '1px solid black', 'vertical-align': 'top'})
 		.appendTo('tr')
 		$('<td/>', {id:'right'})
 		.css({width:'80%' , height:'100%' , border: '1px solid black' 
@@ -109,77 +124,8 @@ app = (()=>{
 					
 					break
 				case 'bugs':
-					$.getJSON(_+'/crwal/bugs', d=>{
-						let pager = d.pager;
-						let list = d.list;
-						alert('벅스' + list)
-						//title artist thumbnail
-						$('#right').empty()
-						$('<table id="content"><tr id="head"></tr></table>')
-						.css({width:'99%', 	
-							height:'50px',
-							border: '3px solid olive',
-							
-							})
-						.appendTo('#right')
-						$.each(['No', '제목', '가수', '앨범'],(i,j)=>{
-							$('<th/>')
-							.html('<b>'+j+'</b>')
-							.css({width:'25%', 	
-								height:'100%',
-								border: '3px solid olive',
-							
-								
-								})
-							.appendTo('#head')
-						})
-						$.each(list, (i,j)=>{
-							$('<tr><td>'+j.seq+'</td><td>'+j.title+'</td><td>'+j.artist+'</td><td><img src="'+j.thumbnail+'"/></td></tr>')
-							.css({width:'20%', 	
-								height:'100%',
-								border: '3px solid olive',
-								
-								})
-							.appendTo('#content tbody')
-							//alert('title' +j.title)
-						})
-						$('#content tr td').css({border: '3px solid olive'})
-						$('<span/>')
-						.appendTo('#right')
-						let i = 0;
-						if(pager.existPrev){
-							$('<a>Prev</a>')
-							.appendTo('#right span')
-						}
-						let start = pager.startPage
-						let end = pager.endPage
-						
-						for( let i = start; i <=end ; i++){
-							$('<a>'+(i+1)+'</a>')
-							.appendTo('#right span')
-							.click(e=>{
-								e.preventDefault()
-								$.getJSON(_+'/cr/bugs/'+i)
-							})
-						}
-						
-						/*$.each(pager,(i,j)=>{
-							alert(i)
-							$('<a>'+(i+1)+'</a>')
-							.appendTo('#right span')
-							
-						})*/
-						if(pager.existNext){
-							$('<a>Next</a>')
-							.appendTo('#right span')
-						}
-						
-					/*	$.each([],()=>{
-							
-						})
-						*/
+					list(0)
 					
-					})
 					break
 				}
 				
@@ -190,7 +136,117 @@ app = (()=>{
 			
 		
 	}
+	let list=x=>{
+		$.getJSON(_+'/crwal/bugs/page/'+x, d=>{
+			$('#right').empty()
+			let pager = d.pager;
+			let list = d.list;
+			//alert('벅스' + list)
+			//title artist thumbnail
+			
+			$('<table id="content"><tr id="head"></tr></table>')
+			.css({width:'99%', 	
+				height:'50px',
+				border: '3px solid olive',
+				
+				})
+			.appendTo('#right')
+			$.each(['No', '제목', '가수', '앨범'],(i,j)=>{
+				$('<th/>')
+				.html('<b>'+j+'</b>')
+				.css({width:'25%', 	
+					height:'100%',
+					border: '3px solid olive',
+				
+					
+					})
+				.appendTo('#head')
+			})
+			$.each(list, (i,j)=>{
+				$('<tr><td>'+j.seq+'</td><td>'+j.title+'</td><td>'+j.artist+'</td><td><img src="'+j.thumbnail+'"/></td></tr>')
+				.css({width:'20%', 	
+					height:'100%',
+					border: '3px solid olive',
+					
+					})
+				.appendTo('#content tbody')
+				//alert('title' +j.title)
+			})
+			$('#content tr td').css({border: '3px solid olive'})
+			$('<div/>', {id:'pagination'})
+			.css({width:'50%', 	
+					height:'50px',
+					margin:'20px auto',
+					/*border: '3px solid olive'*/})
+			.appendTo('#right')
+			if(pager.existPrev){
+				$('<span/>')
+				.css({width: '50px',
+					  height: '30px',
+					  display: 'inline-block',
+		              border: '1px solid black'})
+				.text('Prev')
+				.appendTo('#pagination')
+				.click(()=>{
+					app.list(pager.prevBlock)
+				})
+			}
+			let start = pager.startPage
+					let end = pager.endPage
+			for( let i = start; i <=end ; i++){
+				$('<span/>')
+				.text(i+1)
+				.css({width:'30px', 	
+						height:'30px',
+						display:'inline-block',
+						margin:'0 auto',			
+						border: '3px solid olive'})
+				.appendTo('#pagination')
+				.click(function(){
+					let num = parseInt($(this).text())
+					
+					app.list(num-1)
+					
+					
+				
+					
+				})
+				
+			}
+			if(pager.existNext){
+				$('<sapn/>')
+				.css({width: '50px',
+					  height: '30px',
+					  display: 'inline-block',
+		              border: '1px solid black'})
+				.text('Next')
+				.appendTo('#pagination')
+				.click(()=>{
+					app.list(pager.nextBlock)
+				})
+			}
+			
+			
+			
+		/*	
+			
 	
-	return {run}
+			
+			$.each(pager,(i,j)=>{
+				alert(i)
+				$('<a>'+(i+1)+'</a>')
+				.appendTo('#right span')
+				
+			})
+			*/
+			
+		/*	$.each([],()=>{
+				
+			})
+			*/
+		
+		})
+	}
+	return {run, list}
 	
 })()
