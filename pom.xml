@@ -187,7 +187,28 @@
 		    <artifactId>mybatis-spring</artifactId>
 		    <version>${mybatis-spring-version}</version>
 		</dependency>
-
+		<!-- Security -->
+			<dependency>
+			    <groupId>org.springframework.security</groupId>
+			    <artifactId>spring-security-web</artifactId>
+			    <version>5.0.7.RELEASE</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.springframework.security</groupId>
+			    <artifactId>spring-security-config</artifactId>
+			    <version>5.0.7.RELEASE</version>
+			</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>5.0.7.RELEASE</version>
+		</dependency>
+		  <dependency>
+	          <groupId>org.springframework.security</groupId>
+	          <artifactId>spring-security-taglibs</artifactId>
+	          <version>5.0.7.RELEASE</version>
+	      </dependency>	
+			
 		
 		<!-- Jackson -->
 		<dependency>

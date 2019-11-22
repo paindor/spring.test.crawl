@@ -1,5 +1,8 @@
 package com.test.web.hcust;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,6 +16,8 @@ public interface HCustMapper {
 	public int existId(String cid);
 	
 	public int countHCusts();
+	public List<HCust> selectAll();
+	
 	
 
 }

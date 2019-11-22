@@ -8,6 +8,15 @@
 		SELECT COUNT (*) FROM HCUST
 	</select>
 
+	<select id="selectAll" resultType="hcust">
+		SELECT* FROM HCUST
+		WHERE CID LIKE 'a%'
+	</select>
+
+
+
+
+
    	<select id="lastCNum" resultType="int">
 		SELECT MAX(CNUM)  CNUM FROM HCUST order by cnum desc
 	</select>
